@@ -3,13 +3,13 @@
    ========================================================== */
 
 let student = {
-  firstName: "Гитлер",
-  lastName: "Адольф",
-  group: "IT-125",
-  currentMonth: 3,
-  isGraduate: false,
-  direction: "Информационные технологии",
-  monthsCompleted: 2
+  firstName: "Иван",        // Имя (строка)
+  lastName: "Иванов",       // Фамилия (строка)
+  group: "IT-125",          // Группа (строка)
+  currentMonth: 3,          // Текущий месяц обучения (число)
+  isGraduate: false,        // Является ли выпускником (логическое)
+  direction: "Информационные технологии", // Направление (строка)
+  monthsCompleted: 2        // Сколько месяцев обучения прошёл (число)
 };
 
 console.log("Задание 1 — объект student:");
@@ -21,11 +21,11 @@ console.log(student);
    ========================================================== */
 
 let bankAccount = {
-  accountNumber: "KZ12 3456 7890 1234",
-  currency: "USD",
-  balance: 15230.5,
-  ownerName: "Иван Иванов",
-  isBlocked: false
+  accountNumber: "KZ12 3456 7890 1234", // Номер счёта (строка)
+  currency: "USD",                      // Валюта (строка)
+  balance: 15230.5,                     // Баланс (число)
+  ownerName: "Иван Иванов",             // Имя владельца (строка)
+  isBlocked: false                      // Заблокирован ли счёт (логический)
 };
 
 console.log("Задание 2 — объект bankAccount:");
@@ -39,6 +39,7 @@ console.log(bankAccount);
 function greetUser() {
   let name = prompt("Введите ваше имя:");
   let surname = prompt("Введите вашу фамилию:");
+
   console.log(`Здравствуйте, ${name} ${surname}!`);
 }
 
@@ -121,3 +122,45 @@ function toRoman() {
 }
 
 toRoman();
+
+
+/* ==========================================================
+   ЗАДАНИЕ 7: таблица умножения
+   ========================================================== */
+
+function multiplicationTable() {
+  let num = Number(prompt("Введите число от 2 до 10:"));
+
+  if (!Number.isInteger(num) || num < 2 || num > 10) {
+    console.log("Нужно ввести целое число от 2 до 10!");
+    return;
+  }
+
+  // цикл от 1 до 10 включительно
+  for (let i = 1; i <= 10; i++) {
+    console.log(`${num} × ${i} = ${num * i}`);
+  }
+}
+
+multiplicationTable();
+
+
+/* ==========================================================
+   ЗАДАНИЕ 8: подсчёт карт VISA в массиве
+   ========================================================== */
+
+let cardNumbers = [
+  "46782346", "45781218", "79874568", "12157845",
+  "36151845", "41250895", "41201961"
+];
+
+let visaCount = 0;
+
+for (let i = 0; i < cardNumbers.length; i++) {
+  // карта VISA — номер начинается с цифры "4"
+  if (cardNumbers[i].startsWith("4")) {
+    visaCount++;
+  }
+}
+
+console.log(`Карт VISA ${visaCount} из ${cardNumbers.length}.`);

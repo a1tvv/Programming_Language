@@ -1,13 +1,342 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Домашнее задание — JS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Домашнее задание — JavaScript</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg:      #0b0d12;
+    --panel:   #12151c;
+    --border:  #232733;
+    --text:    #dfe2ea;
+    --muted:   #868b9c;
+    --accent:  #ffb454;
+    --accent2: #7fd8a6;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --sans: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ color-scheme: dark; }
+
+  body{
+    margin: 0;
+    padding: 48px 20px 80px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: var(--accent2); }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .window{
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,.6);
+  }
+
+  .titlebar{
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 13px 18px;
+    background: #0e1016;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dots{ display:flex; gap: 7px; flex-shrink: 0; }
+  .dots span{
+    width: 11px; height: 11px; border-radius: 50%;
+    background: #363b48;
+  }
+
+  .titlebar .filename{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .content{ padding: 40px 40px 8px; }
+
+  @media (max-width: 560px){
+    .content{ padding: 28px 20px 8px; }
+    body{ padding: 28px 12px 60px; }
+  }
+
+  .hero{
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--muted);
+    white-space: pre-wrap;
+    margin: 0 0 34px;
+  }
+  .hero .kw{ color: var(--accent); }
+  .hero .title-line{
+    display:block;
+    color: var(--text);
+    font-size: 21px;
+    font-weight: 600;
+    margin: 6px 0 10px;
+    font-family: var(--sans);
+  }
+
+  .tasklist{
+    list-style: none;
+    margin: 0 0 36px;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .task{
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    gap: 4px 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .task-num{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #454b5c;
+    padding-top: 2px;
+  }
+
+  .task-title{
+    font-weight: 500;
+    font-size: 15.5px;
+  }
+
+  .task-desc{
+    grid-column: 2 / span 1;
+    color: var(--muted);
+    font-size: 13.5px;
+    margin-top: 4px;
+  }
+
+  .task-tag{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .02em;
+    color: var(--accent2);
+    border: 1px solid #2c4436;
+    background: #142019;
+    padding: 3px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+    height: fit-content;
+  }
+  .task-tag.alt{
+    color: var(--accent);
+    border-color: #443622;
+    background: #201a10;
+  }
+
+  .console{
+    font-family: var(--mono);
+    font-size: 13px;
+    background: #0e1016;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 0 0 32px;
+    color: #b7bccb;
+    min-height: 116px;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  .console .line{ display:flex; gap: 10px; padding: 2px 0; }
+  .console .line.placeholder{ color: var(--muted); }
+  .console .prompt{ color: var(--accent2); user-select:none; }
+  .console .cursor{
+    display:inline-block;
+    width: 7px; height: 14px;
+    background: var(--accent2);
+    margin-left: 2px;
+    animation: blink 1.1s steps(1) infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .console .cursor{ animation: none; opacity: .6; }
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  .howto{
+    font-size: 13.5px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding: 22px 0 32px;
+  }
+  .howto strong{ color: var(--text); font-weight: 500; }
+  .howto ol{ margin: 10px 0 0; padding-left: 20px; }
+  .howto li{ margin: 6px 0; }
+  kbd{
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: #1b1f2a;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+
+</style>
 </head>
 <body>
-  <h1>Домашнее задание по JavaScript</h1>
-  <p>Откройте консоль разработчика (F12 → вкладка Console), чтобы увидеть результат выполнения всех 6 заданий.</p>
 
+  <div class="window">
+    <div class="titlebar">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="filename">index.html</div>
+    </div>
+
+    <div class="content">
+
+      <p class="hero"><span class="kw">/**</span>
+ <span class="title-line">Домашнее задание по JavaScript</span>
+ * Объекты, условные операторы, switch, циклы, массивы, prompt/console
+ <span class="kw">*/</span></p>
+
+      <ul class="tasklist">
+        <li class="task">
+          <span class="task-num">01</span>
+          <span class="task-title">Объект «студент»</span>
+          <span class="task-tag">объект</span>
+          <span class="task-desc">Имя, фамилия, группа, месяц обучения, статус выпускника и направление — одним объектом.</span>
+        </li>
+        <li class="task">
+          <span class="task-num">02</span>
+          <span class="task-title">Объект «банковский счёт»</span>
+          <span class="task-tag">объект</span>
+          <span class="task-desc">Номер счёта, валюта, баланс, владелец и статус блокировки.</span>
+        </li>
+        <li class="task">
+          <span class="task-num">03</span>
+          <span class="task-title">Приветствие</span>
+          <span class="task-tag alt">программа</span>
+          <span class="task-desc">Спрашивает имя и фамилию через prompt, выводит «Здравствуйте, Имя Фамилия!».</span>
+        </li>
+        <li class="task">
+          <span class="task-num">04</span>
+          <span class="task-title">Сравнение чисел</span>
+          <span class="task-tag alt">программа</span>
+          <span class="task-desc">Два числа через prompt — определяет большее или сообщает о равенстве.</span>
+        </li>
+        <li class="task">
+          <span class="task-num">05</span>
+          <span class="task-title">Светофор</span>
+          <span class="task-tag alt">программа</span>
+          <span class="task-desc">По введённому цвету печатает действие по ПДД: стой / жди / иди.</span>
+        </li>
+        <li class="task">
+          <span class="task-num">06</span>
+          <span class="task-title">Конвертер в римские числа</span>
+          <span class="task-tag alt">программа</span>
+          <span class="task-desc">Число от 1 до 9 превращает в римскую запись, например 2 → II.</span>
+        </li>
+        <li class="task">
+          <span class="task-num">07</span>
+          <span class="task-title">Таблица умножения</span>
+          <span class="task-tag alt">программа</span>
+          <span class="task-desc">Число от 2 до 10 через prompt — циклом печатает таблицу умножения на 10 строк.</span>
+        </li>
+        <li class="task">
+          <span class="task-num">08</span>
+          <span class="task-title">Подсчёт карт VISA</span>
+          <span class="task-tag">массив</span>
+          <span class="task-desc">Считает в массиве номеров карт, сколько начинаются с цифры 4 (VISA).</span>
+        </li>
+      </ul>
+
+      <div class="console" id="live-console">
+        <div class="line placeholder"><span class="prompt">&gt;</span> Жду ответов на все окна…<span class="cursor"></span></div>
+      </div>
+
+      <div class="howto">
+        <strong>Как проверить</strong>
+        <ol>
+          <li>Отвечай на всплывающие окна по заданиям 3–7 (задание 8 выводится сразу) — результат появится прямо здесь, в чёрном окне выше.</li>
+          <li>Задания 1 и 2 (объекты student и bankAccount) на страницу не выводятся — их видно только в консоли браузера: <kbd>DevTools</kbd> (<kbd>F12</kbd> или <kbd>⌘⌥I</kbd>) → вкладка Console.</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Мост "живой консоли": зеркалит console.log() на страницу,
+    // не трогая исходный script.js — он как был с обычным
+    // console.log(), так и остался (важно для сдачи преподавателю).
+    (function () {
+      const box = document.getElementById("live-console");
+      if (!box) return;
+
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+
+      const originalLog = console.log;
+      let cleared = false;
+      let skipNext = false; // пропускаем сам объект после его заголовка
+
+      console.log = function (...args) {
+        originalLog.apply(console, args); // в настоящую консоль (F12) — всегда
+
+        const first = args[0];
+
+        // задания 1 и 2 — не выводим на страницу (только в консоль браузера)
+        if (typeof first === "string" && (first.startsWith("Задание 1") || first.startsWith("Задание 2"))) {
+          skipNext = true;
+          return;
+        }
+        if (skipNext) {
+          skipNext = false;
+          return;
+        }
+
+        if (!cleared) {
+          box.innerHTML = "";
+          cleared = true;
+        }
+
+        const line = document.createElement("div");
+        line.className = "line";
+
+        const promptSpan = document.createElement("span");
+        promptSpan.className = "prompt";
+        promptSpan.textContent = ">";
+        line.appendChild(promptSpan);
+
+        const text = args
+          .map((a) => (typeof a === "object" && a !== null ? JSON.stringify(a) : String(a)))
+          .join(" ");
+        const textSpan = document.createElement("span");
+        textSpan.textContent = text;
+        line.appendChild(textSpan);
+
+        box.appendChild(line);
+        box.appendChild(cursor); // сдвигаем мигающий курсор в конец
+        box.scrollTop = box.scrollHeight;
+      };
+    })();
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
