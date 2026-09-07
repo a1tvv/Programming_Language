@@ -3,8 +3,8 @@
    ========================================================== */
 
 let student = {
-  firstName: "Иван",
-  lastName: "Иванов",
+  firstName: "Гитлер",
+  lastName: "Адольф",
   group: "IT-125",
   currentMonth: 3,
   isGraduate: false,
